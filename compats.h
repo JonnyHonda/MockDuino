@@ -63,7 +63,6 @@ float DallasTemperature::getTempCByIndex(int index){
 class Comms{
     public:
     void begin(int);
-    
     void print(float);
     void print(const char*);
     void print(int);
@@ -78,11 +77,11 @@ void Comms::begin(int rate){
 }
 
 void Comms::print(int v){
-    printf("%d\n",v);
+    printf("%d",v);
 }
 
 void Comms::print(float v){
-    printf("%f\n",v);
+    printf("%f",v);
 }
 
 void Comms::print(const char* str){
@@ -103,11 +102,18 @@ void Comms::println(const char* str){
 
 Comms Serial;
 
+
+/*
+    Mock object to simulate a CLD Display
+*/
 class LiquidCrystal{
     public:
         LiquidCrystal(int e, int r, int d1, int d2,  int d3, int d4);
         void begin(int, int);
         void setCursor(int, int);
+        void print(float);
+        void print(const char*);
+        void print(int);
 };
 
 LiquidCrystal::LiquidCrystal(int e, int r, int d1, int d2, int d3, int d4){
@@ -115,8 +121,19 @@ LiquidCrystal::LiquidCrystal(int e, int r, int d1, int d2, int d3, int d4){
 }
 
 void LiquidCrystal::begin(int c, int r){
+
 }
 
-void LiquidCrystal::setCursor(int c, int r){
+void LiquidCrystal::setCursor(int c, int r){ 
 
+}
+
+void LiquidCrystal::print(float){
+    printf("%f", str);
+}
+void LiquidCrystal::print(const char*){
+    printf("%s", str);
+}
+void LiquidCrystal::print(int){
+    printf("%d", str);
 }
