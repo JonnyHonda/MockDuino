@@ -128,12 +128,12 @@ void LiquidCrystal::setCursor(int c, int r){
 
 }
 
-void LiquidCrystal::print(float){
-    printf("%f", str);
+void LiquidCrystal::print(float v){
+    printf("%f", v);
 }
-void LiquidCrystal::print(const char*){
+void LiquidCrystal::print(const char* str){
     printf("%s", str);
 }
-void LiquidCrystal::print(int){
-    printf("%d", str);
+void LiquidCrystal::print(int v){
+    printf("%d", v);
 }
