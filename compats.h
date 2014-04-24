@@ -3,23 +3,42 @@
 */
 
 #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
+#include <unistd.h>
+#include <string.h>
 /**
     Function to imitate millis
 	@ return int
     the divisor will need altering depending ont the speed of your machine
 **/
 
+#define HIGH 0x1
+#define LOW  0x0
+
+#define INPUT 0x0
+#define OUTPUT 0x1
+
+
+
 #define DS18B20_MAX = 2000;
 #define DS18B20_MIN = -400;
-int millis(){
+
+typedef unsigned char uint8_t;
+typedef unsigned int word;
+typedef uint8_t boolean;
+typedef uint8_t byte;
+
+void setup(void);
+void loop(void);
+unsigned long int millis(){
 	return (clock()/1000);
 }
 
 void delay(int t){
     usleep(t);
 }
+
+void pinMode(uint8_t, uint8_t){}
+void digitalWrite(uint8_t, uint8_t){}
 
 /**
  Mock object for OneWire
