@@ -1,16 +1,20 @@
 #define COMPAT true
 #ifdef COMPAT
-    #include <stdio.h>
-    #include <time.h> 
     #include "mockduino.cpp"
+    #include "./OneWire.h"
+    #include "./DallasTemperature.h"
+    #include "./LiquidCrystal.h"
 #else
     #include <OneWire.h>
     #include <DallasTemperature.h>
     #include <LiquidCrystal.h>
 #endif
 
-// Data wire is plugged into pin 2 on the Arduino
+// Data wire for DS18B20s is plugged into pin 10 on the Arduino
 #define ONE_WIRE_BUS 10
+
+#define WATER_MAX_TEMP = 90
+#define AIR_MIN_TEMP = 3
 
 // Define 2 pins to use as outputs for warning LEDs
 int led[2] = {8,9};
@@ -25,16 +29,16 @@ int interval = 5000;
 unsigned long t = 0;
 float temp;
 
+char* strarray[] = {"Water = ", "Air   = "};
 
-char *strarray[2] = {"Water = ", "Air   = "};
-
-// initialize the library with the numbers of the interface pins
+// Initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 void setup(void)
 {
   // start serial port
   Serial.begin(9600);
-  
+
+  // Setup pins for Warning LEDs
   pinMode(led[0], OUTPUT); 
   pinMode(led[1], OUTPUT);
   
@@ -52,30 +56,23 @@ void setup(void)
 void loop(void){
 // By do it this way the temperatures are aways updated and
 // and no delays are used
-  if( millis() > (interval + t)){
-    if(state == 0){
-      state = 1;
-    }else{
-      state = 0;
-    }
-  t = millis();
-}
   sensors.requestTemperatures(); // Send the command to get temperatures   
   lcd.setCursor(0,0);
   lcd.print(strarray[state]);
   lcd.setCursor(0,1);
   temp = sensors.getTempCByIndex(state);
-  switch(state){
-      case 0: 
-         (temp > 85 ) ? digitalWrite(led[state], HIGH) : digitalWrite(led[state], LOW);
-        break;
-      case 1:
-        (temp < 3 ) ? digitalWrite(led[state], HIGH) : digitalWrite(led[state], LOW);  
-        break;
-      
-  }
-  lcd.print(temp);
-  lcd.print((char)223);
-  lcd.print("C"); 
+  if( millis() > (interval + t)){
+    if(state == 0){
+      (temp > 85 ) ? digitalWrite(led[state], HIGH) : digitalWrite(led[state], LOW);
+      state = 1;
+    }else{
+      (temp < 3 ) ? digitalWrite(led[state], HIGH) : digitalWrite(led[state], LOW);
+      state = 0;
+    }
+  t = millis();
 }
-
+//  Serial.print(t);
+  // Celsius symbol
+  lcd.print((char)223);
+  lcd.print("C  "); 
+}
